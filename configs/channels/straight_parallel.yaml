@@ -1,0 +1,58 @@
+# Straight Parallel Channels - Baseline Design
+# Simple, cost-effective, easy to manufacture
+# 2D configuration (extensible to 3D)
+
+metadata:
+  name: "Straight Parallel (Baseline)"
+  description: "Simple parallel channels with uniform spacing for baseline comparison"
+  inspiration: "Traditional heat sink fins"
+
+pattern:
+  ndim: 2
+  type: "straight"
+  algorithm: "parallel_lines"
+
+  # No branching for straight pattern
+  levels: null
+  branching_factor: null
+  branching_angle_deg: null
+  length_decay: null
+  width_decay: null
+
+  # Inlet/outlet (flow across chip)
+  inlet_position_mm: [0, 0]  # Left edge, will generate multiple inlets
+  outlet_positions_mm: [[30, 0]]  # Right edge, will generate multiple outlets
+
+  # Coverage
+  target_coverage_ratio: 0.30
+  prefer_hotspots: false  # Uniform distribution
+
+geometry:
+  width_um: 50.0
+  depth_um: 100.0
+  min_width_um: null  # No tapering
+  wall_thickness_um: 50.0  # Spacing between channels
+  roughness_um: 0.5
+  coating: null
+
+flow:
+  fluid_type: "water"
+  fluid:
+    density_kg_per_m3: 1000.0
+    viscosity_pa_s: 0.001
+    specific_heat_j_per_kg_k: 4186.0
+    thermal_conductivity_w_per_m_k: 0.6
+    prandtl_number: 7.0
+
+  operating_conditions:
+    inlet_temp_c: 20.0
+    flow_rate_ml_per_min: 0.5
+    inlet_pressure_pa: 101325.0
+
+  regime: "laminar"
+  model: "poiseuille_1d"
+
+expected_performance:
+  max_pressure_drop_pa: 800.0
+  reynolds_number: 50.0
+  heat_removal_rate_w: 150.0

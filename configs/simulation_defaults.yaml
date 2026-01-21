@@ -1,0 +1,85 @@
+# Simulation Default Parameters
+# Centralized configuration for simulation resolution, visualization settings, and other constants
+# All scripts and pages should import from this config to ensure consistency
+
+# Grid Resolution
+grid:
+  # Spatial discretization for FDM thermal solver
+  resolution_cells_per_mm: [8.0, 8.0]  # Current: 360×360 cells for 45×45mm chip
+
+  # Resolution presets for different use cases
+  presets:
+    low: [2.0, 2.0]      # 90×90 cells - fast prototyping
+    medium: [4.0, 4.0]   # 180×180 cells - good balance
+    high: [8.0, 8.0]     # 360×360 cells - production quality
+    ultra: [16.0, 16.0]  # 720×720 cells - publication quality (slow)
+
+# Fluid Temperature Tracking
+fluid_visualization:
+  # Number of segments to divide each channel for temperature gradient visualization
+  segments_per_channel: 200  # Current: 200 segments for ultra-smooth gradients
+
+  # Segment count presets
+  presets:
+    coarse: 20    # Visible color banding
+    medium: 50    # Good for prototyping
+    fine: 100     # Smooth gradients
+    ultra: 200    # Publication-quality smoothness
+    extreme: 500  # Overkill (diminishing returns)
+
+# Solver Settings
+solver:
+  thermal:
+    method: "direct"  # Options: "direct", "iterative"
+    tolerance: 1e-6
+    max_iterations: 1000
+
+  flow:
+    method: "direct"  # 1D network model uses direct solve
+    tolerance: 1e-8
+
+# Visualization Settings
+visualization:
+  # Colorscales
+  temperature_colorscale: "hot"  # Options: "hot", "viridis", "plasma"
+  fluid_colorscale: "Turbo"      # Options: "Turbo", "Jet", "RdYlBu"
+
+  # Figure dimensions (for saved images)
+  figure_width_px: 1600
+  figure_height_px: 1200
+  dpi_scale: 2
+
+  # Animation
+  animation_fps: 10
+  animation_frames: 30
+  animation_duration_sec: 3.0
+
+# Hero Slideshow Settings
+slideshow:
+  # Default chip and channel configs to use
+  chip_config: "intel_xeon_cpu"
+  channel_config: "straight_parallel"
+
+  # Channel network parameters for slideshow
+  n_channels: 40
+  channel_width_um: 500
+  channel_depth_um: 500
+  pressure_drop_kpa: 30.0
+
+  # Auto-generation timeout
+  generation_timeout_sec: 300
+
+# Default Operating Conditions (can be overridden by channel configs)
+operating_conditions:
+  inlet_temp_c: 20.0
+  flow_rate_ml_per_min: 3662.8  # Total for all channels
+  inlet_pressure_pa: 131325.0    # Atmospheric + 30 kPa
+  outlet_pressure_pa: 101325.0   # Atmospheric
+
+# UI Text Templates (for consistency)
+ui_text:
+  grid_resolution_format: "{nx}×{ny} cells"
+  fluid_segments_format: "{n}-Segment Fluid Temperature Tracking"
+
+  # Technical descriptions
+  technical_subtitle: "{grid_res} FDM Grid | {segments}"

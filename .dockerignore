@@ -1,0 +1,72 @@
+# Git files
+.git
+.gitignore
+.gitattributes
+
+# Python cache
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info
+dist
+build
+.eggs
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test files
+test_*.py
+*_test.py
+tests/
+.pytest_cache
+.coverage
+
+# Documentation
+*.md
+!README.md
+docs/
+
+# Development scripts
+prof_grok*.txt
+*_output.txt
+generate_both_designs.py
+run_design_comparison.py
+
+# Temporary files
+*.tmp
+*.log
+*.bak
+
+# Docker files
+docker/
+Dockerfile.old
+docker-compose*.yml.old
+.dockerignore
+
+# Development data
+static/comparison_*/
+scripts/static/
+
+# Session summaries
+SESSION_*.md
+PROGRESS_SUMMARY.md
+DEVELOPMENT_JOURNEY.md

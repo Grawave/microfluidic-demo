@@ -1,0 +1,62 @@
+# Fractal Network - Advanced Optimization
+# Self-similar branching for maximum coverage with minimal pressure drop
+# 2D configuration (extensible to 3D)
+
+metadata:
+  name: "Fractal Network (Advanced)"
+  description: "Self-similar fractal pattern for optimal heat extraction"
+  inspiration: "Fractal geometry in nature (lungs, tree branches)"
+
+pattern:
+  ndim: 2
+  type: "fractal"
+  algorithm: "fractal_h_tree"  # H-tree fractal pattern
+
+  # Fractal parameters
+  levels: 4  # 4 iterations
+  branching_factor: 2
+  branching_angle_deg: 90.0  # Orthogonal branching
+  length_decay: 0.707  # √2/2 for symmetric coverage
+  width_decay: 0.65  # Slightly more aggressive
+
+  # Central inlet, distributed outlets
+  inlet_position_mm: [15, 15]  # Center
+  outlet_positions_mm:
+    - [2, 2]    # Corner outlets
+    - [28, 2]
+    - [2, 28]
+    - [28, 28]
+
+  # Maximum coverage
+  target_coverage_ratio: 0.40
+  prefer_hotspots: true
+
+geometry:
+  width_um: 50.0
+  depth_um: 50.0  # Shallower for fractal
+  min_width_um: 10.0  # Very small terminal channels
+  wall_thickness_um: 8.0
+  roughness_um: 0.3  # Smoother for low pressure drop
+  coating: "hydrophobic"
+
+flow:
+  fluid_type: "water"
+  fluid:
+    density_kg_per_m3: 1000.0
+    viscosity_pa_s: 0.001
+    specific_heat_j_per_kg_k: 4186.0
+    thermal_conductivity_w_per_m_k: 0.6
+    prandtl_number: 7.0
+
+  operating_conditions:
+    inlet_temp_c: 20.0
+    flow_rate_ml_per_min: 0.3
+    inlet_pressure_pa: 101325.0
+
+  regime: "laminar"
+  model: "poiseuille_1d"
+
+expected_performance:
+  max_pressure_drop_pa: 1200.0
+  reynolds_number: 40.0
+  heat_removal_rate_w: 250.0

@@ -1,0 +1,89 @@
+# Nvidia A100 GPU - AI Training Accelerator
+# High power density, irregular hotspot pattern
+# 2D configuration (extensible to 3D)
+
+metadata:
+  name: "Nvidia A100 GPU (AI Training)"
+  description: "High-performance AI training GPU with tensor cores and HBM memory"
+  manufacturer: "Nvidia"
+  category: "AI_GPU"
+
+geometry:
+  ndim: 2
+  size_mm: [25, 25]  # Compact but powerful
+  resolution_cells_per_mm: [12, 12]  # Higher resolution for small die → 300×300 grid
+  origin_mm: [0, 0]
+
+thermal:
+  tdp_watts: 400.0  # High TDP in small package
+  base_temp_c: 90.0  # GPUs run hotter
+
+  material:
+    name: "silicon"
+    thermal_conductivity_w_per_m_k: 150.0
+    specific_heat_j_per_kg_k: 700.0
+    density_kg_per_m3: 2330.0
+
+  heat_sources:
+    # Tensor core clusters (irregular, high-variance pattern)
+    - id: "tensor_core_cluster_0"
+      position_mm: [8, 8]
+      intensity_w_per_mm2: 4000.0  # High intensity
+      distribution_type: "gaussian"
+      spread_mm: 2.0
+      time_profile: "constant"
+
+    - id: "tensor_core_cluster_1"
+      position_mm: [17, 8]
+      intensity_w_per_mm2: 4200.0
+      distribution_type: "gaussian"
+      spread_mm: 2.0
+      time_profile: "constant"
+
+    - id: "tensor_core_cluster_2"
+      position_mm: [8, 17]
+      intensity_w_per_mm2: 3800.0
+      distribution_type: "gaussian"
+      spread_mm: 2.0
+      time_profile: "constant"
+
+    - id: "tensor_core_cluster_3"
+      position_mm: [17, 17]
+      intensity_w_per_mm2: 4100.0
+      distribution_type: "gaussian"
+      spread_mm: 2.0
+      time_profile: "constant"
+
+    # Edge clusters (HBM memory controllers at edges)
+    - id: "hbm_controller_left"
+      position_mm: [2, 12.5]
+      intensity_w_per_mm2: 3000.0
+      distribution_type: "uniform_rect"
+      extent_mm: [2, 15]
+      time_profile: "constant"
+
+    - id: "hbm_controller_right"
+      position_mm: [23, 12.5]
+      intensity_w_per_mm2: 3000.0
+      distribution_type: "uniform_rect"
+      extent_mm: [2, 15]
+      time_profile: "constant"
+
+    - id: "hbm_controller_top"
+      position_mm: [12.5, 23]
+      intensity_w_per_mm2: 2800.0
+      distribution_type: "uniform_rect"
+      extent_mm: [15, 2]
+      time_profile: "constant"
+
+    - id: "hbm_controller_bottom"
+      position_mm: [12.5, 2]
+      intensity_w_per_mm2: 2800.0
+      distribution_type: "uniform_rect"
+      extent_mm: [15, 2]
+      time_profile: "constant"
+
+  boundaries:
+    type: "convective"
+    ambient_temp_c: 25.0
+    heat_transfer_coefficient_w_per_m2_k: 15.0  # Better cooling assumed

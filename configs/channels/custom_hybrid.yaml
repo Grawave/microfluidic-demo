@@ -1,0 +1,60 @@
+# Custom Hybrid - Configurable Design
+# Combines multiple approaches for flexibility
+# 2D configuration (extensible to 3D)
+
+metadata:
+  name: "Custom Hybrid (Configurable)"
+  description: "Hybrid design combining straight + branched for configurability"
+  inspiration: "Best-of-both-worlds approach"
+
+pattern:
+  ndim: 2
+  type: "custom_hybrid"
+  algorithm: "hybrid_straight_branched"
+
+  # Hybrid: main straight channels with branched distribution
+  levels: 2  # Limited branching
+  branching_factor: 2
+  branching_angle_deg: 30.0  # Gentle branching
+  length_decay: 0.85  # Minimal decay
+  width_decay: 0.80
+
+  # Multiple inlets along edge
+  inlet_position_mm: [0, 15]
+  outlet_positions_mm:
+    - [30, 10]
+    - [30, 20]
+
+  # Balanced coverage
+  target_coverage_ratio: 0.36
+  prefer_hotspots: true  # Slight bias
+
+geometry:
+  width_um: 45.0
+  depth_um: 90.0
+  min_width_um: 25.0
+  wall_thickness_um: 15.0
+  roughness_um: 0.5
+  coating: null
+
+flow:
+  fluid_type: "water"
+  fluid:
+    density_kg_per_m3: 1000.0
+    viscosity_pa_s: 0.001
+    specific_heat_j_per_kg_k: 4186.0
+    thermal_conductivity_w_per_m_k: 0.6
+    prandtl_number: 7.0
+
+  operating_conditions:
+    inlet_temp_c: 20.0
+    flow_rate_ml_per_min: 0.5
+    inlet_pressure_pa: 101325.0
+
+  regime: "laminar"
+  model: "poiseuille_1d"
+
+expected_performance:
+  max_pressure_drop_pa: 1100.0
+  reynolds_number: 48.0
+  heat_removal_rate_w: 210.0

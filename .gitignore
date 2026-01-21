@@ -1,0 +1,49 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+venv/
+env/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Testing and coverage
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+*.cover
+
+# Project-specific
+*.hdf5
+*.h5
+simulation_results/
+output/
+.grok/
+.cleanup/
+.claude/
+docs/
+
+# Data outputs (logs, feedback, etc.)
+data/logs/
+data/feedback/
+data/pw.txt
+
+# Temporary files
+*.tmp
+*.log
+.ipynb_checkpoints/
+__pycache__/
+*.pyc

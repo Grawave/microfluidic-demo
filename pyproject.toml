@@ -1,0 +1,51 @@
+[project]
+name = "microfluidic-demo"
+version = "0.1.0"
+description = "Microfluidic Cooling Simulation Demo - Thermal-Fluidic Coupled Physics"
+readme = "README.md"
+requires-python = ">=3.11"
+authors = []
+dependencies = [
+    "dask[distributed]>=2025.12.0",
+    "h5py>=3.15.1",
+    "kaleido>=1.2.0",
+    "numpy>=2.4.1",
+    "openpyxl>=3.1.5",
+    "pandas>=2.3.3",
+    "pillow>=12.0.0",
+    "plotly>=6.5.2",
+    "pydantic>=2.12.5",
+    "pyyaml>=6.0.3",
+    "scipy>=1.17.0",
+    "streamlit>=1.53.0",
+    "tabulate>=0.9.0",
+]
+
+[project.optional-dependencies]
+dev = []
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/mfdemo"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+select = ["E", "F", "W", "I"]
+
+[tool.ruff.isort]
+known-first-party = ["mfdemo"]
+
+[dependency-groups]
+dev = [
+    "black>=25.12.0",
+    "ipython>=9.9.0",
+    "mypy>=1.19.1",
+    "pytest>=9.0.2",
+    "pytest-asyncio>=1.3.0",
+    "pytest-cov>=7.0.0",
+    "ruff>=0.14.12",
+]

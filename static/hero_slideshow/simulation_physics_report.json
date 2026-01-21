@@ -1,0 +1,175 @@
+{
+  "metadata": {
+    "generated_at": "2026-01-20T10:03:25.599178",
+    "report_version": "1.0",
+    "purpose": "Structured simulation report for physics validation and LLM review"
+  },
+  "configuration": {
+    "chip": {
+      "model": "Intel Xeon CPU (Server Baseline)",
+      "tdp_watts": 250.0,
+      "size_mm": [
+        45.0,
+        45.0
+      ],
+      "material": "silicon",
+      "thermal_conductivity_w_per_m_k": 150.0,
+      "n_heat_sources": 5,
+      "total_power_w": 202.63272615654165
+    },
+    "channels": {
+      "count": 8,
+      "cross_section_um": "300\u00d7300",
+      "hydraulic_diameter_um": 300,
+      "length_mm": 45.0,
+      "pattern": "straight_parallel"
+    },
+    "grid": {
+      "resolution_text": "360\u00d7360 cells",
+      "total_cells": 202500,
+      "cell_size_mm": [
+        0.10022271714922049,
+        0.10022271714922049
+      ]
+    },
+    "fluid": {
+      "type": "water",
+      "density_kg_per_m3": 1000.0,
+      "viscosity_pa_s": 0.001,
+      "specific_heat_j_per_kg_k": 4186.0,
+      "thermal_conductivity_w_per_m_k": 0.6,
+      "inlet_temp_c": 20.0
+    }
+  },
+  "methodology": {
+    "thermal_solver": {
+      "method": "2D Finite Difference Method (FDM)",
+      "governing_equation": "\u2207\u00b2T = -Q/k (Poisson equation)",
+      "discretization": "Central difference scheme on structured Cartesian grid",
+      "solution_method": "Direct sparse solver (scipy.sparse.linalg.spsolve)",
+      "boundary_conditions": {
+        "channels": "Convective (h from Nusselt correlation)",
+        "edges": "Convective (h = 10 W/m\u00b2\u00b7K, ambient)",
+        "heat_sources": "Volumetric heat generation"
+      }
+    },
+    "flow_solver": {
+      "method": "1D Hydraulic Network",
+      "governing_equation": "\u0394P = (128 \u03bc L Q) / (\u03c0 D_h\u2074) (Hagen-Poiseuille)",
+      "flow_regime": "Laminar (Re < 2300)",
+      "solution_method": "Linear system (pressure-flow relationship)",
+      "assumptions": [
+        "Fully developed flow",
+        "Incompressible fluid",
+        "Ideal manifolds (uniform distribution)",
+        "No entrance/exit effects"
+      ]
+    },
+    "thermal_fluidic_coupling": {
+      "method": "Picard iteration with under-relaxation (two-way coupling)",
+      "relaxation_factor": 0.1,
+      "max_iterations": 15,
+      "convergence_tolerance": 0.01,
+      "heat_transfer_coefficient": "h = (Nu \u00d7 k_fluid) / D_h",
+      "nusselt_number": 7.54,
+      "nusselt_correlation": "Constant Nu for fully developed laminar flow in rectangular channels",
+      "fluid_temperature_evolution": "dT/dx = q / (\u1e41 c_p)",
+      "segments_per_channel": 200,
+      "coupling_description": "Thermal field affects fluid temps, fluid cooling affects thermal field (iterative until convergence)"
+    },
+    "assumptions": [
+      "2D thermal model (valid for thin dies <1mm)",
+      "Steady-state (no transients)",
+      "Laminar flow throughout",
+      "Uniform channel distribution",
+      "No phase change (single-phase liquid cooling)"
+    ],
+    "limitations": [
+      "Not 3D - through-plane temperature variation ignored",
+      "No turbulent flow modeling",
+      "Empirical convection correlations (not solving boundary layers)",
+      "No entrance/exit pressure losses",
+      "No flow maldistribution effects"
+    ]
+  },
+  "results": {
+    "thermal": {
+      "T_max_c": 123.12307142787586,
+      "T_min_c": 25.00307849177604,
+      "T_range_c": 98.11999293609982
+    },
+    "flow": {
+      "total_flow_ml_per_min": 47.46976744186044,
+      "flow_per_channel_ml_per_min": 5.933720930232555,
+      "velocity_m_per_s": 1.098837209302325,
+      "reynolds_number": 329.6511627906975,
+      "flow_regime": "laminar",
+      "pressure_drop_kpa": 15.0,
+      "mass_flow_rate_g_per_s": 0.791162790697674
+    },
+    "fluid_temperatures": {
+      "inlet_c": 20.0,
+      "avg_outlet_c": 46.52052413477935,
+      "max_outlet_c": 55.9437226098205,
+      "min_outlet_c": 32.97780118947364,
+      "temperature_rise_c": 26.52052413477935,
+      "boiling_margin_c": 44.0562773901795
+    },
+    "heat_transfer": {
+      "heat_to_fluid_w": 87.83086919160228,
+      "heat_transfer_efficiency_pct": 43.344858877212914,
+      "boundary_losses_w": 114.80185696493938
+    }
+  },
+  "physics_validation": {
+    "energy_balance": {
+      "power_input_w": 202.63272615654165,
+      "heat_to_fluid_w": 87.83086919160228,
+      "other_losses_w": 114.80185696493938,
+      "balance_error_pct": 56.655141122787086,
+      "status": "\u26a0 Low efficiency"
+    },
+    "flow_regime": {
+      "reynolds_number": 329.6511627906975,
+      "critical_re": 2300,
+      "regime": "laminar",
+      "status": "\u2713 Laminar (consistent with Nu=7.54)"
+    },
+    "temperature_checks": {
+      "fluid_below_boiling": {
+        "max_fluid_temp_c": 55.9437226098205,
+        "boiling_point_c": 100.0,
+        "margin_c": 44.0562773901795,
+        "status": "\u2713 Safe"
+      },
+      "chip_temperature_reasonable": {
+        "max_chip_temp_c": 123.12307142787586,
+        "typical_max_c": 85.0,
+        "status": "\u26a0 Very high"
+      }
+    },
+    "physical_consistency": {
+      "pressure_drop_reasonable": {
+        "value_kpa": 15.0,
+        "typical_range_kpa": [
+          5,
+          50
+        ],
+        "status": "\u2713 Within typical range"
+      },
+      "flow_rate_reasonable": {
+        "value_ml_per_min": 47.46976744186044,
+        "typical_range_ml_per_min": [
+          50,
+          500
+        ],
+        "status": "\u26a0 Outside typical range"
+      }
+    }
+  },
+  "performance": {
+    "thermal_solve_description": "Direct sparse solver for 2D Laplacian",
+    "flow_solve_description": "Linear system inversion (<1ms)",
+    "typical_solve_time_seconds": 5
+  }
+}

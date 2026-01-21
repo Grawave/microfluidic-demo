@@ -1,0 +1,70 @@
+# Intel Xeon Server CPU - Baseline Server Chip
+# Moderate TDP, balanced cooling requirements
+# 2D configuration (extensible to 3D by adding z dimension)
+
+metadata:
+  name: "Intel Xeon CPU (Server Baseline)"
+  description: "Enterprise server processor with balanced thermal characteristics"
+  manufacturer: "Intel"
+  category: "Server_CPU"
+
+geometry:
+  ndim: 2
+  size_mm: [45, 45]  # Large die size typical of server CPUs
+  resolution_cells_per_mm: [10, 10]  # 10 cells/mm → 450×450 grid
+  origin_mm: [0, 0]
+
+thermal:
+  tdp_watts: 250.0  # Thermal Design Power
+  base_temp_c: 75.0  # Junction temperature under load
+
+  material:
+    name: "silicon"
+    thermal_conductivity_w_per_m_k: 150.0
+    specific_heat_j_per_kg_k: 700.0
+    density_kg_per_m3: 2330.0
+
+  heat_sources:
+    # Core clusters distributed across die (200W total across 4 clusters = 50W each)
+    # Gaussian spread_mm=4.0 gives effective area ~50 mm², so intensity = 50W / 50mm² = 1.0 W/mm²
+    - id: "core_cluster_0_3"
+      position_mm: [11.25, 11.25]  # Top-left quadrant
+      intensity_w_per_mm2: 1.0
+      distribution_type: "gaussian"
+      spread_mm: 4.0
+      time_profile: "constant"
+
+    - id: "core_cluster_4_7"
+      position_mm: [33.75, 11.25]  # Top-right quadrant
+      intensity_w_per_mm2: 1.0
+      distribution_type: "gaussian"
+      spread_mm: 4.0
+      time_profile: "constant"
+
+    - id: "core_cluster_8_11"
+      position_mm: [11.25, 33.75]  # Bottom-left quadrant
+      intensity_w_per_mm2: 1.0
+      distribution_type: "gaussian"
+      spread_mm: 4.0
+      time_profile: "constant"
+
+    - id: "core_cluster_12_15"
+      position_mm: [33.75, 33.75]  # Bottom-right quadrant
+      intensity_w_per_mm2: 1.0
+      distribution_type: "gaussian"
+      spread_mm: 4.0
+      time_profile: "constant"
+
+    # Central memory controller / interconnect (50W)
+    # Uniform rect 10×10mm = 100 mm², so intensity = 50W / 100mm² = 0.5 W/mm²
+    - id: "memory_controller"
+      position_mm: [22.5, 22.5]  # Center
+      intensity_w_per_mm2: 0.5
+      distribution_type: "uniform_rect"
+      extent_mm: [10, 10]
+      time_profile: "constant"
+
+  boundaries:
+    type: "convective"
+    ambient_temp_c: 25.0
+    heat_transfer_coefficient_w_per_m2_k: 10.0  # Natural convection baseline

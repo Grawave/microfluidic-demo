@@ -1,0 +1,96 @@
+# AMD EPYC Server CPU - High Core Count
+# Large die, higher TDP, more distributed heat sources
+# 2D configuration (extensible to 3D)
+
+metadata:
+  name: "AMD EPYC CPU (High-Core Count)"
+  description: "High-performance server CPU with chiplet architecture and high core density"
+  manufacturer: "AMD"
+  category: "Server_CPU"
+
+geometry:
+  ndim: 2
+  size_mm: [75, 75]  # Very large die (chiplet design)
+  resolution_cells_per_mm: [8, 8]  # 8 cells/mm → 600×600 grid
+  origin_mm: [0, 0]
+
+thermal:
+  tdp_watts: 400.0  # Higher TDP
+  base_temp_c: 85.0
+
+  material:
+    name: "silicon"
+    thermal_conductivity_w_per_m_k: 150.0
+    specific_heat_j_per_kg_k: 700.0
+    density_kg_per_m3: 2330.0
+
+  heat_sources:
+    # 8 chiplets arranged in a grid pattern
+    - id: "chiplet_0"
+      position_mm: [18.75, 18.75]
+      intensity_w_per_mm2: 3000.0
+      distribution_type: "gaussian"
+      spread_mm: 3.5
+      time_profile: "constant"
+
+    - id: "chiplet_1"
+      position_mm: [37.5, 18.75]
+      intensity_w_per_mm2: 3200.0  # Slight variation
+      distribution_type: "gaussian"
+      spread_mm: 3.5
+      time_profile: "constant"
+
+    - id: "chiplet_2"
+      position_mm: [56.25, 18.75]
+      intensity_w_per_mm2: 3000.0
+      distribution_type: "gaussian"
+      spread_mm: 3.5
+      time_profile: "constant"
+
+    - id: "chiplet_3"
+      position_mm: [18.75, 37.5]
+      intensity_w_per_mm2: 3100.0
+      distribution_type: "gaussian"
+      spread_mm: 3.5
+      time_profile: "constant"
+
+    - id: "chiplet_4"
+      position_mm: [37.5, 37.5]
+      intensity_w_per_mm2: 3200.0
+      distribution_type: "gaussian"
+      spread_mm: 3.5
+      time_profile: "constant"
+
+    - id: "chiplet_5"
+      position_mm: [56.25, 37.5]
+      intensity_w_per_mm2: 3100.0
+      distribution_type: "gaussian"
+      spread_mm: 3.5
+      time_profile: "constant"
+
+    - id: "chiplet_6"
+      position_mm: [18.75, 56.25]
+      intensity_w_per_mm2: 3000.0
+      distribution_type: "gaussian"
+      spread_mm: 3.5
+      time_profile: "constant"
+
+    - id: "chiplet_7"
+      position_mm: [56.25, 56.25]
+      intensity_w_per_mm2: 3000.0
+      distribution_type: "gaussian"
+      spread_mm: 3.5
+      time_profile: "constant"
+
+    # Central I/O die
+    - id: "io_die"
+      position_mm: [37.5, 56.25]
+      intensity_w_per_mm2: 2500.0
+      distribution_type: "uniform_rect"
+      extent_mm: [12, 12]
+      time_profile: "constant"
+
+  boundaries:
+    type: "convective"
+    ambient_temp_c: 25.0
+    heat_transfer_coefficient_w_per_m2_k: 10.0

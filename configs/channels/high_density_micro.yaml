@@ -1,0 +1,58 @@
+# High-Density Microchannel - Extreme Cooling
+# Maximum channel density for ultra-high TDP chips
+# 2D configuration (extensible to 3D)
+
+metadata:
+  name: "High-Density Micro (Extreme)"
+  description: "Ultra-high density microchannels for maximum heat extraction"
+  inspiration: "Silicon microchannel heat sinks"
+
+pattern:
+  ndim: 2
+  type: "high_density"
+  algorithm: "dense_grid"
+
+  # Dense grid pattern, no branching
+  levels: null
+  branching_factor: null
+  branching_angle_deg: null
+  length_decay: null
+  width_decay: null
+
+  # Distributed inlets/outlets
+  inlet_position_mm: [0, 0]  # Will generate array of inlets
+  outlet_positions_mm: [[30, 0]]  # Will generate array of outlets
+
+  # Maximum coverage
+  target_coverage_ratio: 0.50  # Very high
+  prefer_hotspots: false  # Uniform ultra-dense
+
+geometry:
+  width_um: 10.0  # Very narrow!
+  depth_um: 40.0  # Shallow to avoid clogging
+  min_width_um: null
+  wall_thickness_um: 5.0  # Minimal spacing
+  roughness_um: 0.2  # Must be very smooth
+  coating: "hydrophobic"  # Prevent clogging
+
+flow:
+  fluid_type: "water"
+  fluid:
+    density_kg_per_m3: 1000.0
+    viscosity_pa_s: 0.001
+    specific_heat_j_per_kg_k: 4186.0
+    thermal_conductivity_w_per_m_k: 0.6
+    prandtl_number: 7.0
+
+  operating_conditions:
+    inlet_temp_c: 20.0
+    flow_rate_ml_per_min: 0.2  # Lower rate due to high resistance
+    inlet_pressure_pa: 101325.0
+
+  regime: "laminar"
+  model: "poiseuille_1d"
+
+expected_performance:
+  max_pressure_drop_pa: 2000.0  # Very high due to narrow channels
+  reynolds_number: 20.0  # Low Re
+  heat_removal_rate_w: 300.0  # Excellent heat transfer

@@ -1,0 +1,60 @@
+# Custom ARM Chip - Low Power Variant
+# Baseline for comparisons, minimal cooling requirements
+# 2D configuration (extensible to 3D)
+
+metadata:
+  name: "Custom ARM Chip (Low-Power Variant)"
+  description: "Energy-efficient ARM processor for edge/mobile server applications"
+  manufacturer: "ARM"
+  category: "Low_Power_CPU"
+
+geometry:
+  ndim: 2
+  size_mm: [15, 15]  # Small die
+  resolution_cells_per_mm: [10, 10]  # 150×150 grid
+  origin_mm: [0, 0]
+
+thermal:
+  tdp_watts: 100.0  # Low TDP
+  base_temp_c: 65.0  # Runs cool
+
+  material:
+    name: "silicon"
+    thermal_conductivity_w_per_m_k: 150.0
+    specific_heat_j_per_kg_k: 700.0
+    density_kg_per_m3: 2330.0
+
+  heat_sources:
+    # Simple, evenly distributed heat pattern
+    - id: "cpu_cores"
+      position_mm: [7.5, 7.5]  # Center
+      intensity_w_per_mm2: 1000.0  # Low intensity
+      distribution_type: "gaussian"
+      spread_mm: 4.0
+      time_profile: "constant"
+
+    - id: "gpu_small"
+      position_mm: [4, 11]
+      intensity_w_per_mm2: 1200.0
+      distribution_type: "gaussian"
+      spread_mm: 2.0
+      time_profile: "constant"
+
+    - id: "npu_ai_accelerator"
+      position_mm: [11, 11]
+      intensity_w_per_mm2: 1100.0
+      distribution_type: "gaussian"
+      spread_mm: 1.5
+      time_profile: "constant"
+
+    - id: "memory_io"
+      position_mm: [7.5, 3]
+      intensity_w_per_mm2: 800.0
+      distribution_type: "uniform_rect"
+      extent_mm: [8, 2]
+      time_profile: "constant"
+
+  boundaries:
+    type: "convective"
+    ambient_temp_c: 25.0
+    heat_transfer_coefficient_w_per_m2_k: 5.0  # Passive cooling adequate

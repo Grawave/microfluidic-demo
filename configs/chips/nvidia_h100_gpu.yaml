@@ -1,0 +1,97 @@
+# Nvidia H100 GPU - Extreme AI Workloads
+# Ultra-high power density, maximum cooling challenge
+# 2D configuration (extensible to 3D)
+
+metadata:
+  name: "Nvidia H100 GPU (Extreme AI)"
+  description: "Cutting-edge AI GPU with maximum power density and performance"
+  manufacturer: "Nvidia"
+  category: "AI_GPU"
+
+geometry:
+  ndim: 2
+  size_mm: [30, 30]  # Slightly larger than A100
+  resolution_cells_per_mm: [10, 10]  # 300×300 grid
+  origin_mm: [0, 0]
+
+thermal:
+  tdp_watts: 700.0  # Extreme TDP
+  base_temp_c: 95.0  # Very hot under load
+
+  material:
+    name: "silicon"
+    thermal_conductivity_w_per_m_k: 150.0
+    specific_heat_j_per_kg_k: 700.0
+    density_kg_per_m3: 2330.0
+
+  heat_sources:
+    # Ultra-dense tensor core layout
+    - id: "tensor_region_nw"
+      position_mm: [7.5, 7.5]
+      intensity_w_per_mm2: 5000.0  # Extreme intensity
+      distribution_type: "gaussian"
+      spread_mm: 2.5
+      time_profile: "constant"
+
+    - id: "tensor_region_ne"
+      position_mm: [22.5, 7.5]
+      intensity_w_per_mm2: 5200.0
+      distribution_type: "gaussian"
+      spread_mm: 2.5
+      time_profile: "constant"
+
+    - id: "tensor_region_sw"
+      position_mm: [7.5, 22.5]
+      intensity_w_per_mm2: 4800.0
+      distribution_type: "gaussian"
+      spread_mm: 2.5
+      time_profile: "constant"
+
+    - id: "tensor_region_se"
+      position_mm: [22.5, 22.5]
+      intensity_w_per_mm2: 5100.0
+      distribution_type: "gaussian"
+      spread_mm: 2.5
+      time_profile: "constant"
+
+    # Central interconnect fabric
+    - id: "interconnect_fabric"
+      position_mm: [15, 15]
+      intensity_w_per_mm2: 4500.0
+      distribution_type: "gaussian"
+      spread_mm: 3.0
+      time_profile: "constant"
+
+    # HBM3 memory (higher bandwidth, more power)
+    - id: "hbm3_stack_0"
+      position_mm: [5, 15]
+      intensity_w_per_mm2: 3500.0
+      distribution_type: "uniform_rect"
+      extent_mm: [4, 12]
+      time_profile: "constant"
+
+    - id: "hbm3_stack_1"
+      position_mm: [25, 15]
+      intensity_w_per_mm2: 3500.0
+      distribution_type: "uniform_rect"
+      extent_mm: [4, 12]
+      time_profile: "constant"
+
+    - id: "hbm3_stack_2"
+      position_mm: [15, 5]
+      intensity_w_per_mm2: 3300.0
+      distribution_type: "uniform_rect"
+      extent_mm: [12, 4]
+      time_profile: "constant"
+
+    - id: "hbm3_stack_3"
+      position_mm: [15, 25]
+      intensity_w_per_mm2: 3300.0
+      distribution_type: "uniform_rect"
+      extent_mm: [12, 4]
+      time_profile: "constant"
+
+  boundaries:
+    type: "convective"
+    ambient_temp_c: 25.0
+    heat_transfer_coefficient_w_per_m2_k: 20.0  # Aggressive cooling required

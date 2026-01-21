@@ -1,0 +1,60 @@
+# Branched Tree Network - Bio-Inspired Design
+# Mimics arterial blood vessel networks for targeted cooling
+# 2D configuration (extensible to 3D)
+
+metadata:
+  name: "Branched Tree Network"
+  description: "Biomimetic branching pattern optimized for hotspot targeting"
+  inspiration: "Arterial blood vessel network"
+
+pattern:
+  ndim: 2
+  type: "branched_tree"
+  algorithm: "recursive_dichotomy"
+
+  # Branching parameters
+  levels: 3  # 3 levels of branching
+  branching_factor: 2  # Binary tree
+  branching_angle_deg: 45.0  # 45° between branches
+  length_decay: 0.75  # Children are 75% of parent length
+  width_decay: 0.7  # Children are 70% of parent width
+
+  # Inlet at center-left, outlets at edges
+  inlet_position_mm: [0, 15]  # Center-left
+  outlet_positions_mm:
+    - [30, 7.5]  # Top-right
+    - [30, 22.5]  # Bottom-right
+
+  # Optimization
+  target_coverage_ratio: 0.35
+  prefer_hotspots: true  # Bias toward heat sources
+
+geometry:
+  width_um: 50.0  # Main trunk
+  depth_um: 80.0
+  min_width_um: 20.0  # Terminal branches
+  wall_thickness_um: 10.0
+  roughness_um: 0.5
+  coating: "hydrophobic"
+
+flow:
+  fluid_type: "water"
+  fluid:
+    density_kg_per_m3: 1000.0
+    viscosity_pa_s: 0.001
+    specific_heat_j_per_kg_k: 4186.0
+    thermal_conductivity_w_per_m_k: 0.6
+    prandtl_number: 7.0
+
+  operating_conditions:
+    inlet_temp_c: 20.0
+    flow_rate_ml_per_min: 0.4
+    inlet_pressure_pa: 101325.0
+
+  regime: "laminar"
+  model: "poiseuille_1d"
+
+expected_performance:
+  max_pressure_drop_pa: 1000.0
+  reynolds_number: 45.0
+  heat_removal_rate_w: 200.0

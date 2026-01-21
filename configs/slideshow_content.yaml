@@ -1,0 +1,120 @@
+# Technical Content for Slideshow Slides
+# Each slide pairs a visualization with technical explanation
+
+slides:
+  - id: 1
+    title: "Thermal Problem: Chip Layout & Solution"
+    visualization: "Chip layout with power distribution (top) and steady-state temperature field (bottom)"
+    content_html: |
+      <strong>Problem Setup:</strong><br>
+      • Intel Xeon CPU: 250W total power<br>
+      • Chip size: 45×45 mm silicon die<br>
+      • Multiple heat sources (cores)<br>
+      • Temperature-dependent silicon k(T)<br><br>
+
+      <strong>Thermal Solver:</strong> 2D Finite Difference Method (FDM)<br><br>
+
+      <strong>Governing Equation:</strong><br>
+      <div class="equation-display" style="text-align: center; margin: 2rem 0;">
+        <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+          <mrow>
+            <msup><mo>∇</mo><mn>2</mn></msup>
+            <mi>T</mi>
+            <mo>=</mo>
+            <mo>−</mo>
+            <mfrac><mi>Q</mi><mi>k</mi></mfrac>
+          </mrow>
+        </math>
+      </div>
+
+      <strong>Discretization:</strong><br>
+      • 360×360 spatial cells (0.125mm resolution)<br>
+      • Sparse matrix: ~648,000 non-zero entries<br>
+      • Direct solver: ~5-6 seconds<br><br>
+
+      <strong>Boundary Conditions:</strong><br>
+      • Convective at channel interfaces<br>
+      • Ambient convection at chip edges<br><br>
+
+      <strong>Result:</strong> Steady-state temperature distribution shown with microfluidic cooling active
+
+  - id: 2
+    title: "Flow Solution & Thermal-Fluidic Coupling"
+    visualization: "Channel network structure (top) and fluid temperature gradients (bottom)"
+    content_html: |
+      <strong>Channel Network:</strong><br>
+      • 8 parallel channels<br>
+      • 300×300 μm cross-section<br>
+      • Hydraulic diameter: <math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>D</mi><mi>h</mi></msub><mo>=</mo><mn>300</mn></math> μm<br><br>
+
+      <strong>Flow Solver:</strong> 1D Hagen-Poiseuille<br>
+      <div class="equation-display" style="text-align: center; margin: 2rem 0;">
+        <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+          <mrow>
+            <mi>Δ</mi><mi>P</mi>
+            <mo>=</mo>
+            <mfrac>
+              <mrow><mn>128</mn><mi>μ</mi><mi>L</mi><mi>Q</mi></mrow>
+              <mrow><mi>π</mi><msubsup><mi>D</mi><mi>h</mi><mn>4</mn></msubsup></mrow>
+            </mfrac>
+          </mrow>
+        </math>
+      </div>
+
+      <strong>Operating Conditions:</strong><br>
+      • Pressure drop: 15 kPa<br>
+      • Total flow: ~47 ml/min<br>
+      • Laminar regime (<math xmlns="http://www.w3.org/1998/Math/MathML"><mi>Re</mi><mo>≈</mo><mn>330</mn></math>)<br><br>
+
+      <strong>Thermal Coupling:</strong><br>
+      • Shah &amp; London (1978) Nu correlation<br>
+      • Full wetted perimeter (all 4 walls)<br>
+      • Temperature-dependent water properties<br><br>
+
+      <strong>Result:</strong><br>
+      Inlet: 20°C → Max outlet: ~56°C<br>
+      Boiling margin: 44°C
+
+  - id: 3
+    title: "Simulation Configuration & Validation"
+    visualization: "Simulation configuration parameters"
+    content_html: |
+      <strong>Configuration:</strong><br>
+      <table style="width: 100%; margin: 1rem 0; border-collapse: collapse;">
+        <tr style="background: rgba(66, 153, 225, 0.1);">
+          <td style="padding: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.1);"><strong>Chip Model</strong></td>
+          <td style="padding: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.1);">Intel Xeon CPU (250W)</td>
+        </tr>
+        <tr style="background: rgba(66, 153, 225, 0.05);">
+          <td style="padding: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.1);"><strong>Chip Size</strong></td>
+          <td style="padding: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.1);">45×45 mm</td>
+        </tr>
+        <tr style="background: rgba(66, 153, 225, 0.1);">
+          <td style="padding: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.1);"><strong>Grid Resolution</strong></td>
+          <td style="padding: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.1);">360×360 cells (0.125mm)</td>
+        </tr>
+        <tr style="background: rgba(66, 153, 225, 0.05);">
+          <td style="padding: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.1);"><strong>Cooling Channels</strong></td>
+          <td style="padding: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.1);">8 parallel (Straight Pattern)</td>
+        </tr>
+        <tr style="background: rgba(66, 153, 225, 0.1);">
+          <td style="padding: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.1);"><strong>Channel Size</strong></td>
+          <td style="padding: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.1);">300×300 μm (square)</td>
+        </tr>
+        <tr style="background: rgba(66, 153, 225, 0.05);">
+          <td style="padding: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.1);"><strong>Fluid Segments</strong></td>
+          <td style="padding: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.1);">200 per channel</td>
+        </tr>
+      </table>
+
+      <strong>Physics Features:</strong><br>
+      • Temperature-dependent material properties<br>
+      • Shah &amp; London (1978) Nusselt correlation<br>
+      • Full 4-wall wetted perimeter model<br>
+      • Iterative property updates (Picard)<br><br>
+
+      <strong>Limitations:</strong><br>
+      • 2D thermal model (thin dies &lt;1mm)<br>
+      • Laminar flow only (Re &lt; 2300)<br>
+      • Steady-state (no transients)<br>
+      • For parametric design exploration

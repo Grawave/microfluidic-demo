@@ -1,0 +1,35 @@
+{
+  "n_slides": 3,
+  "slides": [
+    {
+      "index": 0,
+      "filename": "slide_1_chip_layout_and_temperature.png",
+      "title": "Thermal Problem: Chip Layout & Solution",
+      "description": "Power distribution and steady-state temperature field"
+    },
+    {
+      "index": 1,
+      "filename": "slide_2_channels_and_coupling.png",
+      "title": "Flow Solution & Thermal-Fluidic Coupling",
+      "description": "Channel structure and fluid temperature gradients"
+    },
+    {
+      "index": 2,
+      "filename": "slide_3_config.png",
+      "title": "Simulation Configuration",
+      "description": "Model parameters and operating conditions"
+    }
+  ],
+  "grid_resolution": "360\u00d7360 cells",
+  "n_channels": 8,
+  "channel_size_um": 300,
+  "fluid_stats": {
+    "inlet_temp_c": 20.0,
+    "avg_outlet_temp_c": 46.52052413477935,
+    "max_outlet_temp_c": 55.9437226098205,
+    "min_outlet_temp_c": 32.97780118947364,
+    "avg_temp_rise_c": 26.52052413477935,
+    "max_temp_rise_c": 35.9437226098205,
+    "boiling_margin_c": 44.0562773901795
+  }
+}

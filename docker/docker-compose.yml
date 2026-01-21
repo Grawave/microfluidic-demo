@@ -1,0 +1,71 @@
+version: '3.8'
+
+services:
+  # Simulation Service - Compute-intensive backend
+  simulation:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.simulation
+    container_name: corintis-simulation
+    ports:
+      - "8000:8000"
+    volumes:
+      # Shared volume for HDF5 files (read-write)
+      - simulation-data:/app/data
+      # Mount configs for easy modification
+      - ../configs:/app/configs:ro
+    environment:
+      - PYTHONUNBUFFERED=1
+      - LOG_LEVEL=INFO
+    networks:
+      - corintis-network
+    restart: unless-stopped
+    # Resource limits for compute-intensive workload
+    deploy:
+      resources:
+        limits:
+          cpus: '4.0'
+          memory: 8G
+        reservations:
+          cpus: '2.0'
+          memory: 4G
+
+  # Dashboard Service - User-facing UI
+  dashboard:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.dashboard
+    container_name: corintis-dashboard
+    ports:
+      - "8501:8501"
+    volumes:
+      # Shared volume for HDF5 files (read-only)
+      - simulation-data:/app/data:ro
+    environment:
+      - PYTHONUNBUFFERED=1
+      - STREAMLIT_SERVER_PORT=8501
+      - STREAMLIT_SERVER_ADDRESS=0.0.0.0
+    networks:
+      - corintis-network
+    depends_on:
+      - simulation
+    restart: unless-stopped
+    # Lighter resource requirements for UI
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 2G
+        reservations:
+          cpus: '0.5'
+          memory: 1G
+
+volumes:
+  # Named volume for persistent data storage
+  simulation-data:
+    driver: local
+
+networks:
+  # Internal network for service communication
+  corintis-network:
+    driver: bridge

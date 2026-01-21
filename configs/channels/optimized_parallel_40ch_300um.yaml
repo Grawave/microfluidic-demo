@@ -1,0 +1,66 @@
+# Optimized Parallel Channels - Increased Flow
+# Same 40 channels as baseline, but higher pressure drop for more flow
+# Target: prevent fluid boiling (keep outlet < 80°C)
+
+metadata:
+  name: "Optimized Parallel (40ch, High Flow)"
+  description: "Optimized cooling with higher flow rate to prevent boiling"
+  inspiration: "Engineering iteration from baseline design"
+
+pattern:
+  ndim: 2
+  type: "straight"
+  algorithm: "parallel_lines"
+
+  # No branching for straight pattern
+  levels: null
+  branching_factor: null
+  branching_angle_deg: null
+  length_decay: null
+  width_decay: null
+
+  # Inlet/outlet (flow across chip)
+  inlet_position_mm: [0, 0]
+  outlet_positions_mm: [[45, 0]]
+
+  # Coverage - 40 channels across 45mm
+  target_coverage_ratio: 0.30
+  prefer_hotspots: false
+
+geometry:
+  width_um: 300.0    # Same as baseline
+  depth_um: 300.0    # Same as baseline
+  min_width_um: null
+  wall_thickness_um: 825.0  # Spacing for 40 channels across 45mm
+  roughness_um: 0.5
+  coating: null
+
+flow:
+  fluid_type: "water"
+  fluid:
+    density_kg_per_m3: 1000.0
+    viscosity_pa_s: 0.001
+    specific_heat_j_per_kg_k: 4186.0
+    thermal_conductivity_w_per_m_k: 0.6
+    prandtl_number: 7.0
+
+  operating_conditions:
+    inlet_temp_c: 20.0
+    flow_rate_ml_per_min: 400.0  # Increased from ~160 to 400
+    inlet_pressure_pa: 101325.0
+
+  regime: "laminar"
+  model: "poiseuille_1d"
+
+expected_performance:
+  max_pressure_drop_pa: 25000.0  # Increased from 10kPa to 25kPa
+  reynolds_number: 550.0  # Higher but still laminar (<2300)
+  heat_removal_rate_w: 250.0  # Improved heat removal
+
+# Design rationale:
+# - Keep same channel geometry (300x300 μm) - proven effective
+# - Increase pressure drop from 10 kPa → 25 kPa (2.5x)
+# - This increases flow from ~160 → ~400 ml/min (2.5x)
+# - Higher flow removes heat faster, preventing boiling
+# - Still laminar (Re ~ 550 << 2300)
+# - Trade-off: requires more powerful pump

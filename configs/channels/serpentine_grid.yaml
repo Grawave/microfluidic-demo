@@ -1,0 +1,58 @@
+# Serpentine Grid - Uniform Flow Distribution
+# Snake-like paths for even coverage across chip
+# 2D configuration (extensible to 3D)
+
+metadata:
+  name: "Serpentine Grid (Uniform)"
+  description: "Snake-like channel paths for uniform flow distribution"
+  inspiration: "Heat exchanger serpentine coils"
+
+pattern:
+  ndim: 2
+  type: "serpentine"
+  algorithm: "snake_meander"
+
+  # No branching, but meandering paths
+  levels: null
+  branching_factor: null
+  branching_angle_deg: null
+  length_decay: null
+  width_decay: null
+
+  # Single inlet/outlet
+  inlet_position_mm: [0, 2]
+  outlet_positions_mm: [[0, 28]]  # Same side, serpentine across chip
+
+  # Good coverage
+  target_coverage_ratio: 0.38
+  prefer_hotspots: false  # Uniform
+
+geometry:
+  width_um: 40.0
+  depth_um: 120.0  # Deeper for better heat transfer
+  min_width_um: null
+  wall_thickness_um: 30.0
+  roughness_um: 0.5
+  coating: null
+
+flow:
+  fluid_type: "water"
+  fluid:
+    density_kg_per_m3: 1000.0
+    viscosity_pa_s: 0.001
+    specific_heat_j_per_kg_k: 4186.0
+    thermal_conductivity_w_per_m_k: 0.6
+    prandtl_number: 7.0
+
+  operating_conditions:
+    inlet_temp_c: 20.0
+    flow_rate_ml_per_min: 0.6
+    inlet_pressure_pa: 101325.0
+
+  regime: "laminar"
+  model: "poiseuille_1d"
+
+expected_performance:
+  max_pressure_drop_pa: 1500.0  # Longer path = higher drop
+  reynolds_number: 60.0
+  heat_removal_rate_w: 180.0

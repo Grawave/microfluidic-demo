@@ -1,0 +1,61 @@
+# Variable Width - Adaptive Design
+# Wider at inlets to reduce pressure drop, narrow at hotspots
+# 2D configuration (extensible to 3D)
+
+metadata:
+  name: "Variable Width (Adaptive)"
+  description: "Adaptive channel widths optimized for pressure drop and targeting"
+  inspiration: "Computational fluid dynamics optimization"
+
+pattern:
+  ndim: 2
+  type: "variable_width"
+  algorithm: "gradient_optimized"
+
+  # Moderate branching with variable widths
+  levels: 2
+  branching_factor: 3  # Ternary branching
+  branching_angle_deg: 60.0
+  length_decay: 0.80
+  width_decay: 0.75  # But with adaptive adjustment
+
+  # Multiple inlets for parallel flow
+  inlet_position_mm: [0, 15]
+  outlet_positions_mm:
+    - [30, 7.5]
+    - [30, 15]
+    - [30, 22.5]
+
+  # Targeted coverage
+  target_coverage_ratio: 0.33
+  prefer_hotspots: true
+
+geometry:
+  width_um: 60.0  # Wider main channels
+  depth_um: 70.0
+  min_width_um: 15.0  # Narrower terminals
+  wall_thickness_um: 12.0
+  roughness_um: 0.4
+  coating: "hydrophobic"
+
+flow:
+  fluid_type: "water"
+  fluid:
+    density_kg_per_m3: 1000.0
+    viscosity_pa_s: 0.001
+    specific_heat_j_per_kg_k: 4186.0
+    thermal_conductivity_w_per_m_k: 0.6
+    prandtl_number: 7.0
+
+  operating_conditions:
+    inlet_temp_c: 20.0
+    flow_rate_ml_per_min: 0.45
+    inlet_pressure_pa: 101325.0
+
+  regime: "laminar"
+  model: "poiseuille_1d"
+
+expected_performance:
+  max_pressure_drop_pa: 900.0  # Lower due to wide inlets
+  reynolds_number: 50.0
+  heat_removal_rate_w: 220.0
